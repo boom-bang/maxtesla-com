@@ -83,10 +83,10 @@ Pushed to `github.com/boom-bang/maxtesla-com`. Vercel deploys `main` on push.
 
 ## Credits
 
-This site stands on the shoulders of two designers whose work directly shaped it:
+This site stands on the shoulders of two humans whose work directly shaped it:
 
 - **[Peter Steinberger](https://steipete.me)** — the overall philosophy (markdown-driven, public source on GitHub, zero-JS by default, Astro + Vercel + MDX, clean typographic prose for posts). Peter publishes the full source of his site at [github.com/steipete/steipete.me](https://github.com/steipete/steipete.me), which served as the blueprint for the content pipeline, directory layout, and deployment approach here.
-- **[Daniel Sun](https://dribbble.com/shots/23530094-personal-website-web-design-visual-identity)** — the visual identity of the about/home hero, specifically the **fly-apart skill-tag animation** that scatters as the reader scrolls. That idea is lifted directly from Daniel's personal website concept on Dribbble (linked above). The implementation here is pure CSS using `animation-timeline: scroll()`, but the design language — colorful pastel pill tags stacked over a bold display headline, flying apart to reveal the word underneath — is his.
+- **[Daniel Sun](https://dribbble.com/shots/23530094-personal-website-web-design-visual-identity)** — home hero, specifically the **fly-apart skill-tag animation** that scatters as the reader scrolls. That idea is lifted directly from Daniel's personal website concept on Dribbble (linked above). The implementation here is pure CSS using `animation-timeline: scroll()`, but the design language — colorful pastel pill tags stacked over a bold display headline, flying apart to reveal the word underneath — is his.
 
 Thank you both.
 
