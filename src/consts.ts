@@ -6,7 +6,7 @@ export const SITE = {
     "Personal site of Max Tesla — building Blask, exploring the edges of product, data, and AI.",
   url: "https://maxtesla.com",
   author: "Max Tesla",
-  email: "max@maxtesla.com",
+  email: "ahoy@maxtesla.com",
   locale: "en-US",
 } as const;
 

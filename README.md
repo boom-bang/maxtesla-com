@@ -74,7 +74,7 @@ Slug is derived from the filename. `draft: true` hides the post from the list, R
 
 ## Deployment
 
-Pushed to `github.com/maxtesla/maxtesla-com`. Vercel deploys `main` on push.
+Pushed to `github.com/boom-bang/maxtesla-com`. Vercel deploys `main` on push.
 
 **DNS** (maxtesla.com on Cloudflare):
 
