@@ -1,0 +1,287 @@
+@import "tailwindcss";
+@plugin "@tailwindcss/typography";
+
+@custom-variant dark (&:where(.dark, .dark *));
+
+/* =========================================================================
+   shadcn/ui design tokens (new-york, neutral) — required by shadcn components.
+   Dark is the default; light is opt-in via `html.light`.
+   ========================================================================= */
+
+:root {
+  --radius: 0.625rem;
+
+  /* shadcn semantic tokens — dark by default */
+  --background: oklch(0.145 0 0);
+  --foreground: oklch(0.985 0 0);
+  --card: oklch(0.205 0 0);
+  --card-foreground: oklch(0.985 0 0);
+  --popover: oklch(0.205 0 0);
+  --popover-foreground: oklch(0.985 0 0);
+  --primary: oklch(0.922 0 0);
+  --primary-foreground: oklch(0.205 0 0);
+  --secondary: oklch(0.269 0 0);
+  --secondary-foreground: oklch(0.985 0 0);
+  --muted: oklch(0.269 0 0);
+  --muted-foreground: oklch(0.708 0 0);
+  --accent: oklch(0.269 0 0);
+  --accent-foreground: oklch(0.985 0 0);
+  --destructive: oklch(0.704 0.191 22.216);
+  --border: oklch(1 0 0 / 10%);
+  --input: oklch(1 0 0 / 15%);
+  --ring: oklch(0.556 0 0);
+  --chart-1: oklch(0.488 0.243 264.376);
+  --chart-2: oklch(0.696 0.17 162.48);
+  --chart-3: oklch(0.769 0.188 70.08);
+  --chart-4: oklch(0.627 0.265 303.9);
+  --chart-5: oklch(0.645 0.246 16.439);
+  --sidebar: oklch(0.205 0 0);
+  --sidebar-foreground: oklch(0.985 0 0);
+  --sidebar-primary: oklch(0.488 0.243 264.376);
+  --sidebar-primary-foreground: oklch(0.985 0 0);
+  --sidebar-accent: oklch(0.269 0 0);
+  --sidebar-accent-foreground: oklch(0.985 0 0);
+  --sidebar-border: oklch(1 0 0 / 10%);
+  --sidebar-ring: oklch(0.556 0 0);
+
+  /* Site-specific tokens (Theo + Daniel synthesis) */
+  --site-bg: #0a0a0a;
+  --site-fg: #e5e5e5;
+  --site-muted: #737373;
+  --site-muted-fg: #a3a3a3;
+  --site-border: #1f1f1f;
+  --site-glow: rgba(255, 255, 255, 0.05);
+
+  /* Old-school Netscape link palette, brightened for #0a0a0a contrast.
+     Source values: #0000EE / #551A8B / #EE0000 (Mosaic / Netscape era). */
+  --link: #5b9fff;
+  --link-visited: #b87aff;
+  --link-hover: #ff5555;
+}
+
+:root.light {
+  /* shadcn light overrides */
+  --background: oklch(0.985 0.01 95);
+  --foreground: oklch(0.145 0 0);
+  --card: oklch(1 0 0);
+  --card-foreground: oklch(0.145 0 0);
+  --popover: oklch(1 0 0);
+  --popover-foreground: oklch(0.145 0 0);
+  --primary: oklch(0.205 0 0);
+  --primary-foreground: oklch(0.985 0 0);
+  --secondary: oklch(0.97 0 0);
+  --secondary-foreground: oklch(0.205 0 0);
+  --muted: oklch(0.97 0 0);
+  --muted-foreground: oklch(0.556 0 0);
+  --accent: oklch(0.97 0 0);
+  --accent-foreground: oklch(0.205 0 0);
+  --destructive: oklch(0.577 0.245 27.325);
+  --border: oklch(0.922 0 0);
+  --input: oklch(0.922 0 0);
+  --ring: oklch(0.708 0 0);
+
+  /* Site-specific light (Daniel cream) */
+  --site-bg: #fdfaf2;
+  --site-fg: #0a0a0a;
+  --site-muted: #525252;
+  --site-muted-fg: #404040;
+  --site-border: #e5e0d5;
+  --site-glow: rgba(10, 10, 10, 0.035);
+}
+
+@theme inline {
+  /* Fonts */
+  --font-sans: "Inter", ui-sans-serif, system-ui, -apple-system, sans-serif;
+  --font-display:
+    "Inter Tight", "Inter", ui-sans-serif, system-ui, -apple-system, sans-serif;
+  --font-mono:
+    "JetBrains Mono", ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas,
+    monospace;
+
+  /* Radii */
+  --radius-sm: calc(var(--radius) - 4px);
+  --radius-md: calc(var(--radius) - 2px);
+  --radius-lg: var(--radius);
+  --radius-xl: calc(var(--radius) + 4px);
+
+  /* Map shadcn tokens into Tailwind utilities */
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --color-card: var(--card);
+  --color-card-foreground: var(--card-foreground);
+  --color-popover: var(--popover);
+  --color-popover-foreground: var(--popover-foreground);
+  --color-primary: var(--primary);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-secondary: var(--secondary);
+  --color-secondary-foreground: var(--secondary-foreground);
+  --color-muted: var(--muted);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-accent: var(--accent);
+  --color-accent-foreground: var(--accent-foreground);
+  --color-destructive: var(--destructive);
+  --color-border: var(--border);
+  --color-input: var(--input);
+  --color-ring: var(--ring);
+
+  /* Site-specific palette for direct use (bg-site, text-site-fg, etc.) */
+  --color-site-bg: var(--site-bg);
+  --color-site-fg: var(--site-fg);
+  --color-site-muted: var(--site-muted);
+  --color-site-muted-fg: var(--site-muted-fg);
+  --color-site-border: var(--site-border);
+
+  /* Skill tag pastels (Daniel-inspired) */
+  --color-tag-green: #bbf7d0;
+  --color-tag-blue: #bfdbfe;
+  --color-tag-purple: #ddd6fe;
+  --color-tag-orange: #fed7aa;
+  --color-tag-yellow: #fef08a;
+  --color-tag-pink: #fbcfe8;
+}
+
+@layer base {
+  html {
+    font-family: var(--font-sans);
+    -webkit-font-smoothing: antialiased;
+    color-scheme: dark;
+    background: var(--site-bg);
+    color: var(--site-fg);
+  }
+
+  html.light {
+    color-scheme: light;
+  }
+
+  body {
+    background: var(--site-bg);
+    color: var(--site-fg);
+    font-feature-settings: "ss01", "cv11";
+    min-height: 100dvh;
+  }
+
+  ::selection {
+    background: var(--site-fg);
+    color: var(--site-bg);
+  }
+
+  * {
+    border-color: var(--site-border);
+  }
+}
+
+/* Inline content link — used for links inside story/now/contact prose
+   AND inside markdown post bodies (via .prose a override below).
+   Pseudo-class order must follow LVHA (link, visited, hover, active).
+   Underline inherits colour via currentColor so it tracks the text. */
+@utility site-link {
+  color: var(--link);
+  text-decoration-line: underline;
+  text-decoration-color: currentColor;
+  text-decoration-thickness: 0.5px;
+  text-underline-offset: 4px;
+  transition: color 0.15s ease;
+}
+.site-link:visited {
+  color: var(--link-visited);
+}
+.site-link:hover,
+.site-link:active {
+  color: var(--link-hover);
+}
+
+/* Apply the same palette to inline links inside post bodies. Tailwind
+   Typography's `.prose` / `.prose-invert` sets its own `a` colour, so we
+   scope to `:not(pre) a` (exclude code blocks) and use the same vars. */
+.prose :where(a):not(:where(pre a)) {
+  color: var(--link);
+  text-decoration-line: underline;
+  text-decoration-color: currentColor;
+  text-decoration-thickness: 0.5px;
+  text-underline-offset: 4px;
+  font-weight: inherit;
+  transition: color 0.15s ease;
+}
+.prose :where(a):not(:where(pre a)):visited {
+  color: var(--link-visited);
+}
+.prose :where(a):not(:where(pre a)):hover,
+.prose :where(a):not(:where(pre a)):active {
+  color: var(--link-hover);
+}
+
+/* Ambient radial glow backdrop (Theo-inspired) */
+@utility glow-bg {
+  background:
+    radial-gradient(
+      ellipse 55% 45% at 50% 50%,
+      var(--site-glow) 0%,
+      transparent 70%
+    ),
+    var(--site-bg);
+}
+
+/* ==========================================================================
+   Shiki dual-theme code blocks (via defaultColor: false in astro.config).
+   Shiki emits `--shiki-light*` and `--shiki-dark*` CSS vars per token.
+   We pick which set to use based on our `html.dark` / `html.light` class.
+   ========================================================================== */
+
+/* Dark is default. */
+.astro-code,
+.astro-code span {
+  color: var(--shiki-dark) !important;
+  background-color: var(--shiki-dark-bg) !important;
+  font-style: var(--shiki-dark-font-style) !important;
+  font-weight: var(--shiki-dark-font-weight) !important;
+  text-decoration: var(--shiki-dark-text-decoration) !important;
+}
+
+html.light .astro-code,
+html.light .astro-code span {
+  color: var(--shiki-light) !important;
+  background-color: var(--shiki-light-bg) !important;
+  font-style: var(--shiki-light-font-style) !important;
+  font-weight: var(--shiki-light-font-weight) !important;
+  text-decoration: var(--shiki-light-text-decoration) !important;
+}
+
+/* ==========================================================================
+   Prose (post body) overrides.
+   Tailwind Typography's `prose-code` targets ALL <code> elements, including
+   tokens inside <pre>. We scope inline-code styling to `:not(pre) > code` and
+   strip the default <pre> background so Shiki's theme shows through.
+   ========================================================================== */
+
+.prose :not(pre) > code {
+  background: var(--site-border);
+  color: var(--site-fg);
+  padding: 0.15em 0.4em;
+  border-radius: 0.25rem;
+  font-family: var(--font-mono);
+  font-size: 0.88em;
+  font-weight: 500;
+}
+
+.prose :not(pre) > code::before,
+.prose :not(pre) > code::after {
+  content: none;
+}
+
+.prose pre {
+  padding: 1.25rem 1.5rem;
+  border-radius: 0.75rem;
+  border: 1px solid var(--site-border);
+  overflow-x: auto;
+  font-family: var(--font-mono);
+  font-size: 0.9em;
+  line-height: 1.6;
+}
+
+.prose pre code {
+  background: transparent !important;
+  padding: 0;
+  border-radius: 0;
+  font-weight: inherit;
+  font-size: inherit;
+}

@@ -1,0 +1,56 @@
+---
+title: "Why I picked Astro over Next.js for this site"
+date: 2026-04-06
+summary: "A personal site is a markdown renderer with opinions. Astro is a markdown renderer with opinions. Next.js is a backend that can also render markdown."
+tags: ["meta", "astro", "engineering"]
+---
+
+This is my first personal site. I almost built it in Next.js anyway.
+
+Not from habit - I just knew Next.js by reputation. Huge community, shadcn/ui ecosystem, every tutorial assumes it. It's the gravitational default for anything frontend. I stopped myself, thought about what I actually needed, and picked [Astro](https://astro.build) instead. Writing this down so future-me doesn't skip that step next time.
+
+This site is a markdown renderer with opinions. Five pages, zero forms, no auth, no database, no mutations. The interactive surface area is a theme toggle and some scroll-driven CSS.
+
+Astro is a markdown renderer with opinions. Next.js is a backend framework that can also render markdown.
+
+Using Next.js here would be like hiring a full-stack team to run a one-person blog. You get everything Next ships - middleware, route handlers, server actions, ISR, edge runtime, parallel routes - and use almost none of it. Every dependency you don't use still costs build time, bundle size, and decision fatigue.
+
+## What Astro gives me
+
+Zero JS ships unless I opt into a client island. My hero's skill-tag animation is `animation-timeline: scroll()` - pure CSS, no React, no hydration, no TTI cost. The property has [limited cross-browser support](https://developer.mozilla.org/en-US/docs/Web/CSS/animation-timeline) as of April 2026 - Chrome and Edge, not yet Baseline - so I wouldn't reach for it in a product.
+
+Content collections give typed frontmatter via Zod schemas. I write `content.config.ts` - twelve lines, shown below - drop an `.mdx` file in `src/content/posts/`, and it's typed end-to-end. No custom loader, no API route, no database client.
+
+Shiki is the default code highlighter. Dual-theme light/dark takes one config block in `astro.config.ts` and a CSS media query - no PrismJS, no rehype chain, no copy-pasting highlight.js CSS from 2018. MDX integrates via `@astrojs/mdx` if I need React components inside a post.
+
+## What I'm giving up
+
+Server actions - don't need them, the site has no mutations. Dynamic routes at request time - everything pre-renders at build, and Astro supports API routes if that changes. The cost is muscle memory: Astro's `.astro` syntax is new. First hour felt like JSX with amnesia. Hour two felt like HTML that finally got proper imports.
+
+## Where I'd still reach for Next.js
+
+The admin dashboard, full-stack e-commerce, anything with real auth flows and a database - Next.js, no debate. Or Hono with a lighter frontend for API-first products. The question is always the same: where does the complexity live? If it's in content, pick a content framework. If it's in mutations and state, pick a full-stack framework.
+
+"Just use Next.js for everything" is a reasonable default. It works, it ships, you don't have to think. The cost is that you stop matching the tool to the problem, and that atrophies judgment. Picking Astro for this site took 20 minutes. Those 20 minutes are the whole point.
+
+```ts
+// content.config.ts — the entire posts layer for this site.
+import { defineCollection } from "astro:content";
+import { glob } from "astro/loaders";
+import { z } from "zod";
+
+const posts = defineCollection({
+  loader: glob({ pattern: "**/*.{md,mdx}", base: "./src/content/posts" }),
+  schema: z.object({
+    title: z.string(),
+    date: z.coerce.date(),
+    summary: z.string().optional(),
+    tags: z.array(z.string()).default([]),
+    draft: z.boolean().default(false),
+  }),
+});
+
+export const collections = { posts };
+```
+
+Twelve lines. Add a file, get types automatically.

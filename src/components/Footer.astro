@@ -1,0 +1,12 @@
+---
+import { SITE } from "@/consts";
+
+const year = new Date().getFullYear();
+---
+
+<footer
+  class="mx-auto mt-24 mb-10 flex max-w-3xl items-center justify-between px-6 font-mono text-xs text-[color:var(--site-muted-fg)]"
+>
+  <span>© {year} {SITE.name}</span>
+  <a href="/rss.xml" class="transition-opacity hover:opacity-60">rss</a>
+</footer>

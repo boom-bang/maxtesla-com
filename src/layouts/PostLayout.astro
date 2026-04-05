@@ -1,0 +1,108 @@
+---
+import type { CollectionEntry } from "astro:content";
+import BaseLayout from "./BaseLayout.astro";
+
+interface Props {
+  post: CollectionEntry<"posts">;
+  prev?: CollectionEntry<"posts"> | null;
+  next?: CollectionEntry<"posts"> | null;
+}
+
+const { post, prev = null, next = null } = Astro.props;
+const { title, date, summary, tags } = post.data;
+
+const formatted = new Intl.DateTimeFormat("en-US", {
+  year: "numeric",
+  month: "long",
+  day: "numeric",
+}).format(date);
+---
+
+<BaseLayout title={title} description={summary}>
+  <article class="mx-auto max-w-2xl px-6 pt-32 pb-20">
+    <header class="mb-12">
+      <a
+        href="/posts"
+        class="mb-8 inline-block font-mono text-xs text-[color:var(--site-muted)] transition-colors hover:text-[color:var(--site-fg)]"
+      >
+        ← posts
+      </a>
+      <h1
+        class="font-display text-3xl leading-[1.1] font-bold tracking-tight text-[color:var(--site-fg)] md:text-5xl"
+      >
+        {title}
+      </h1>
+      <div
+        class="mt-6 flex items-center gap-4 font-mono text-xs text-[color:var(--site-muted)]"
+      >
+        <time datetime={date.toISOString()}>{formatted}</time>
+        {
+          tags.length > 0 && (
+            <>
+              <span aria-hidden>·</span>
+              <ul class="flex gap-2">
+                {tags.map((tag) => (
+                  <li class="text-[color:var(--site-muted-fg)]">#{tag}</li>
+                ))}
+              </ul>
+            </>
+          )
+        }
+      </div>
+    </header>
+
+    <div
+      class="prose dark:prose-invert max-w-none font-sans prose-headings:font-display prose-headings:tracking-tight"
+    >
+      <slot />
+    </div>
+
+    {
+      (prev || next) && (
+        <nav
+          class="mt-20 grid grid-cols-1 gap-6 border-t border-[color:var(--site-border)] pt-10 sm:grid-cols-2"
+          aria-label="Post navigation"
+        >
+          {prev ? (
+            <a
+              href={`/posts/${prev.id}`}
+              rel="prev"
+              class="group flex flex-col gap-2 rounded-lg border border-[color:var(--site-border)] p-5 transition-colors hover:border-[color:var(--site-muted-fg)] hover:bg-[color:var(--site-border)]/25"
+            >
+              <span class="flex items-center gap-2 font-mono text-xs text-[color:var(--site-muted)]">
+                <span aria-hidden="true" class="transition-transform group-hover:-translate-x-0.5">
+                  ←
+                </span>
+                previous post
+              </span>
+              <span class="font-display text-base font-semibold leading-snug tracking-tight text-[color:var(--site-fg)] transition-colors group-hover:text-[color:var(--site-muted-fg)]">
+                {prev.data.title}
+              </span>
+            </a>
+          ) : (
+            <span />
+          )}
+          {next ? (
+            <a
+              href={`/posts/${next.id}`}
+              rel="next"
+              class="group flex flex-col gap-2 rounded-lg border border-[color:var(--site-border)] p-5 text-right transition-colors hover:border-[color:var(--site-muted-fg)] hover:bg-[color:var(--site-border)]/25 sm:items-end"
+            >
+              <span class="flex items-center justify-end gap-2 font-mono text-xs text-[color:var(--site-muted)]">
+                next post
+                <span aria-hidden="true" class="transition-transform group-hover:translate-x-0.5">
+                  →
+                </span>
+              </span>
+              <span class="font-display text-base font-semibold leading-snug tracking-tight text-[color:var(--site-fg)] transition-colors group-hover:text-[color:var(--site-muted-fg)]">
+                {next.data.title}
+              </span>
+            </a>
+          ) : (
+            <span />
+          )}
+        </nav>
+      )
+    }
+  </article>
+</BaseLayout>

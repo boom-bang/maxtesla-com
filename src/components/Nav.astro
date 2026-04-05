@@ -1,0 +1,67 @@
+---
+import { NAV_LINKS, SITE } from "@/consts";
+
+const pathname = Astro.url.pathname;
+const isActive = (href: string) => (href === "/" ? pathname === "/" : pathname.startsWith(href));
+---
+
+<nav
+  class="fixed top-0 left-0 right-0 z-40 mx-auto flex max-w-3xl items-center justify-between px-6 py-5 font-mono text-sm"
+>
+  <a
+    href="/"
+    class="text-[color:var(--site-fg)] transition-opacity hover:opacity-60"
+  >
+    {SITE.handle}
+  </a>
+  <div class="flex items-center gap-6">
+    {
+      NAV_LINKS.filter((l) => l.href !== "/").map((link) => (
+        <a
+          href={link.href}
+          class:list={[
+            "transition-opacity hover:opacity-100",
+            isActive(link.href)
+              ? "text-[color:var(--site-fg)] opacity-100"
+              : "text-[color:var(--site-muted-fg)] opacity-70",
+          ]}
+        >
+          {link.label}
+        </a>
+      ))
+    }
+    <button
+      id="theme-toggle"
+      type="button"
+      aria-label="Toggle theme"
+      class="text-[color:var(--site-muted-fg)] opacity-70 transition-opacity hover:opacity-100"
+    >
+      <span data-theme-dark>◐</span>
+      <span data-theme-light class="hidden">◑</span>
+    </button>
+  </div>
+</nav>
+
+<script is:inline>
+  (function () {
+    const btn = document.getElementById("theme-toggle");
+    if (!btn) return;
+    const root = document.documentElement;
+    const darkIcon = btn.querySelector("[data-theme-dark]");
+    const lightIcon = btn.querySelector("[data-theme-light]");
+    const syncIcons = () => {
+      const isLight = root.classList.contains("light");
+      darkIcon?.classList.toggle("hidden", isLight);
+      lightIcon?.classList.toggle("hidden", !isLight);
+    };
+    syncIcons();
+    btn.addEventListener("click", () => {
+      const isLight = root.classList.toggle("light");
+      root.classList.toggle("dark", !isLight);
+      try {
+        localStorage.setItem("mt-theme", isLight ? "light" : "dark");
+      } catch (_) {}
+      syncIcons();
+    });
+  })();
+</script>

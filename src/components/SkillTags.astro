@@ -1,0 +1,228 @@
+---
+// SkillTags.astro
+// Pure-CSS scroll-driven skill tag pile (Daniel-inspired).
+// Tags start stacked on top of a target word and fly apart as the user
+// scrolls down the page, revealing the word behind them. Scrolling back up
+// re-collides them. No JS — uses CSS `animation-timeline: scroll()`.
+//
+// Browser support: Chrome/Edge 115+, Safari 26+, Firefox behind a flag.
+// Fallback via @supports: Firefox/old Safari show the scattered state with
+// no animation (still looks good, just no scroll reveal).
+
+interface Props {
+  word: string;
+}
+
+const { word } = Astro.props;
+
+// Scatter target for each tag. `x`/`y` are final offsets from the word's
+// center (px). `rotate` is the final rotation. `jitter` is the tiny rotation
+// offset used in the collapsed/piled state so the stack reads as multiple
+// stickers, not one.
+const TAGS = [
+  {
+    label: "product",
+    icon: "✦",
+    bg: "#bfdbfe",
+    fg: "#1e3a8a",
+    x: -160,
+    y: -78,
+    rotate: -10,
+    jitter: -2,
+  },
+  {
+    label: "data",
+    icon: "◈",
+    bg: "#bbf7d0",
+    fg: "#14532d",
+    x: -30,
+    y: -125,
+    rotate: 6,
+    jitter: 4,
+  },
+  {
+    label: "AI",
+    icon: "✧",
+    bg: "#ddd6fe",
+    fg: "#4c1d95",
+    x: 95,
+    y: -95,
+    rotate: -5,
+    jitter: -1,
+  },
+  {
+    label: "design",
+    icon: "◐",
+    bg: "#fed7aa",
+    fg: "#7c2d12",
+    x: 125,
+    y: 45,
+    rotate: 11,
+    jitter: 3,
+  },
+  {
+    label: "founder",
+    icon: "◉",
+    bg: "#fbcfe8",
+    fg: "#831843",
+    x: -100,
+    y: 60,
+    rotate: -7,
+    jitter: -3,
+  },
+] as const;
+---
+
+<span class="skill-tags">
+  <span class="skill-tags__word">{word}</span>
+  <span class="skill-tags__stack" aria-hidden="true">
+    {
+      TAGS.map((tag, i) => (
+        <span
+          class="skill-tags__tag"
+          style={{
+            "--tag-x": `${tag.x}px`,
+            "--tag-y": `${tag.y}px`,
+            "--tag-rotate": `${tag.rotate}deg`,
+            "--tag-jitter": `${tag.jitter}deg`,
+            "--tag-bg": tag.bg,
+            "--tag-fg": tag.fg,
+            "--tag-z": String(10 + i),
+          }}
+        >
+          <span aria-hidden="true">{tag.icon}</span>
+          {tag.label}
+        </span>
+      ))
+    }
+  </span>
+</span>
+
+<style>
+  .skill-tags {
+    position: relative;
+    display: inline-block;
+    white-space: nowrap;
+    vertical-align: baseline;
+  }
+
+  .skill-tags__word {
+    position: relative;
+    z-index: 0;
+    color: inherit;
+    /* Word is faded when tags cover it; reveals as they scatter. */
+    opacity: 0.4;
+    animation: word-reveal 1ms linear;
+    animation-timeline: scroll(root block);
+    animation-range: 0 260px;
+    animation-fill-mode: both;
+  }
+
+  .skill-tags__stack {
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    width: 0;
+    height: 0;
+    pointer-events: none;
+  }
+
+  .skill-tags__tag {
+    position: absolute;
+    left: 0;
+    top: 0;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.25em;
+    padding: 0.42em 0.95em;
+    border-radius: 9999px;
+    font-family: var(--font-sans);
+    font-size: 0.3em;
+    font-weight: 700;
+    letter-spacing: -0.01em;
+    white-space: nowrap;
+    background: var(--tag-bg);
+    color: var(--tag-fg);
+    box-shadow:
+      0 6px 18px rgba(0, 0, 0, 0.22),
+      0 1px 0 rgba(255, 255, 255, 0.35) inset;
+    ring: 1px solid rgba(0, 0, 0, 0.08);
+    z-index: var(--tag-z);
+    pointer-events: auto;
+    cursor: default;
+    will-change: transform;
+    transform-origin: center center;
+    /* Piled/collapsed state — tags loosely stacked (25% of scatter offset)
+       so all 5 stickers are visible from the start, overlapping the word. */
+    transform:
+      translate(
+        calc(-50% + var(--tag-x) * 0.28),
+        calc(-50% + var(--tag-y) * 0.28)
+      )
+      rotate(var(--tag-jitter));
+    animation: scatter 1ms linear;
+    animation-timeline: scroll(root block);
+    animation-range: 0 260px;
+    animation-fill-mode: both;
+    transition: box-shadow 0.25s ease;
+  }
+
+  .skill-tags__tag:hover {
+    box-shadow:
+      0 12px 30px rgba(0, 0, 0, 0.32),
+      0 1px 0 rgba(255, 255, 255, 0.35) inset;
+  }
+
+  @keyframes scatter {
+    from {
+      transform:
+        translate(
+          calc(-50% + var(--tag-x) * 0.28),
+          calc(-50% + var(--tag-y) * 0.28)
+        )
+        rotate(var(--tag-jitter));
+    }
+    to {
+      transform:
+        translate(calc(-50% + var(--tag-x)), calc(-50% + var(--tag-y)))
+        rotate(var(--tag-rotate));
+    }
+  }
+
+  @keyframes word-reveal {
+    from {
+      opacity: 0.35;
+    }
+    to {
+      opacity: 1;
+    }
+  }
+
+  /* Fallback for browsers without scroll-driven animation support:
+     show the scattered state statically. Still readable, just no scroll. */
+  @supports not (animation-timeline: scroll()) {
+    .skill-tags__word {
+      opacity: 1;
+      animation: none;
+    }
+    .skill-tags__tag {
+      animation: none;
+      transform:
+        translate(calc(-50% + var(--tag-x)), calc(-50% + var(--tag-y)))
+        rotate(var(--tag-rotate));
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .skill-tags__word {
+      opacity: 1;
+      animation: none;
+    }
+    .skill-tags__tag {
+      animation: none;
+      transform:
+        translate(calc(-50% + var(--tag-x)), calc(-50% + var(--tag-y)))
+        rotate(var(--tag-rotate));
+    }
+  }
+</style>

@@ -1,0 +1,168 @@
+---
+import { getCollection } from "astro:content";
+import SkillTags from "@/components/SkillTags.astro";
+import BaseLayout from "@/layouts/BaseLayout.astro";
+
+const LATEST_COUNT = 5;
+
+const latestPosts = (
+  await getCollection("posts", ({ data }) => !data.draft)
+)
+  .sort((a, b) => b.data.date.getTime() - a.data.date.getTime())
+  .slice(0, LATEST_COUNT);
+
+const fmt = new Intl.DateTimeFormat("en-US", {
+  year: "numeric",
+  month: "short",
+  day: "numeric",
+});
+---
+
+<BaseLayout>
+  <main class="mx-auto max-w-3xl px-6">
+    {/* Hero fills the first viewport, bottom-aligned (Daniel-style). */}
+    <section class="flex min-h-dvh flex-col justify-end pb-20">
+      <p class="mb-8 font-mono text-sm text-[color:var(--site-muted-fg)]">
+        ✌ hey, i'm max.
+      </p>
+      <h1
+        class="font-display text-4xl leading-[1.08] font-bold tracking-tight text-[color:var(--site-fg)] md:text-6xl lg:text-7xl"
+      >
+        building{" "}
+        <span class="text-[color:var(--site-muted-fg)]">Blask</span> and
+        exploring the <SkillTags word="edges" /> of ambitious software.
+      </h1>
+    </section>
+
+    <div class="pt-24 pb-20">
+      <section class="mb-20">
+        <h2
+          class="mb-4 font-mono text-xs tracking-[0.18em] text-[color:var(--site-muted)] uppercase"
+        >
+          story
+        </h2>
+        <div
+          class="space-y-4 font-sans text-base leading-relaxed text-[color:var(--site-muted-fg)] md:text-lg"
+        >
+          <p>
+            A decade in tech, fintech, and crypto. Helped
+            build Kryptex before co-founding <a
+              href="https://blask.com"
+              class="site-link"
+              rel="noopener noreferrer">Blask</a
+            > in 2022. As for today, millions of
+            live pages, scraped and structured into something brands
+            can reason about. I also run R&D.
+          </p>
+          <p>
+            Alongside software I compose synth music. Based in Bangkok. I also ride motorcycles.
+          </p>
+        </div>
+      </section>
+
+      <section class="mb-20">
+        <h2
+          class="mb-4 font-mono text-xs tracking-[0.18em] text-[color:var(--site-muted)] uppercase"
+        >
+          now
+        </h2>
+        <ul
+          class="space-y-2 font-sans text-base text-[color:var(--site-muted-fg)] md:text-lg"
+        >
+          <li>— Building Blask (iGaming market intelligence).</li>
+          <li>— Writing occasional <a class="site-link" href="/posts">notes</a> on product, data, and AI.</li>
+          <li>— Recording Ep. 2 of <a class="site-link" href="https://www.youtube.com/@SignalandNoisebyBlask" rel="nofollow"> Signal & Noise</a> by Blask.</li>
+        </ul>
+      </section>
+
+      <section class="mb-20">
+        <h2
+          class="mb-4 font-mono text-xs tracking-[0.18em] text-[color:var(--site-muted)] uppercase"
+        >
+          contact
+        </h2>
+        <ul class="space-y-2 font-mono text-sm text-[color:var(--site-muted-fg)]">
+          <li>
+            <a
+              href="mailto:ahoy@maxtesla.com"
+              class="site-link"
+              >ahoy [at] maxtesla.com</a
+            >
+          </li>
+          <li>
+            <a
+              href="https://x.com/allsetmax"
+              rel="noopener noreferrer nofollow"
+              class="site-link"
+              >twitter / x</a
+            >
+          </li>
+          <li>
+            <a
+              href="https://github.com/boom-bang"
+              rel="noopener noreferrer nofollow"
+              class="site-link"
+              >github</a
+            >
+          </li>
+        </ul>
+      </section>
+
+      {/* Latest posts — 5 most recent, with link to full archive. */}
+      <section>
+        <h2
+          class="mb-6 font-mono text-xs tracking-[0.18em] text-[color:var(--site-muted)] uppercase"
+        >
+          latest posts
+        </h2>
+        {
+          latestPosts.length === 0 ? (
+            <p class="font-mono text-sm text-[color:var(--site-muted)]">
+              nothing published yet.
+            </p>
+          ) : (
+            <ul class="divide-y divide-[color:var(--site-border)]">
+              {latestPosts.map((post) => (
+                <li>
+                  <a
+                    href={`/posts/${post.id}`}
+                    class="group flex flex-col gap-1 py-5 transition-colors hover:bg-[color:var(--site-border)]/20 md:flex-row md:items-baseline md:gap-6 md:px-2"
+                  >
+                    <time
+                      datetime={post.data.date.toISOString()}
+                      class="shrink-0 font-mono text-xs text-[color:var(--site-muted)] md:w-24"
+                    >
+                      {fmt.format(post.data.date)}
+                    </time>
+                    <div class="min-w-0 flex-1">
+                      <h3 class="font-display text-lg font-semibold tracking-tight text-[color:var(--site-fg)] transition-colors group-hover:text-[color:var(--site-muted-fg)] md:text-xl">
+                        {post.data.title}
+                      </h3>
+                      {post.data.summary && (
+                        <p class="mt-1 text-sm text-[color:var(--site-muted-fg)]">
+                          {post.data.summary}
+                        </p>
+                      )}
+                    </div>
+                  </a>
+                </li>
+              ))}
+            </ul>
+          )
+        }
+        <div class="mt-8">
+          <a
+            href="/posts"
+            class="group inline-flex items-center gap-2 font-mono text-sm text-[color:var(--site-muted-fg)] transition-colors hover:text-[color:var(--site-fg)]"
+          >
+            all posts
+            <span
+              class="transition-transform group-hover:translate-x-1"
+              aria-hidden="true">→</span
+            >
+          </a>
+        </div>
+      </section>
+    </div>
+  </main>
+</BaseLayout>
