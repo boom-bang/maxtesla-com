@@ -2,8 +2,21 @@
 import { getCollection } from "astro:content";
 import SkillTags from "@/components/SkillTags.astro";
 import BaseLayout from "@/layouts/BaseLayout.astro";
+import { SITE } from "@/consts";
 
 const LATEST_COUNT = 5;
+
+const profileSchema = {
+  "@context": "https://schema.org",
+  "@type": "ProfilePage",
+  mainEntity: {
+    "@type": "Person",
+    name: SITE.author,
+    url: SITE.url,
+    description: SITE.description,
+    sameAs: [...SITE.sameAs],
+  },
+};
 
 const latestPosts = (
   await getCollection("posts", ({ data }) => !data.draft)
@@ -19,6 +32,9 @@ const fmt = new Intl.DateTimeFormat("en-US", {
 ---
 
 <BaseLayout>
+  <Fragment slot="head">
+    <script type="application/ld+json" set:html={JSON.stringify(profileSchema)}></script>
+  </Fragment>
   <main class="mx-auto max-w-3xl px-6">
     {/* Hero fills the first viewport, bottom-aligned (Daniel-style). */}
     <section class="flex min-h-dvh flex-col justify-end pb-20">

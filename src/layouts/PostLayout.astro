@@ -1,6 +1,7 @@
 ---
 import type { CollectionEntry } from "astro:content";
 import BaseLayout from "./BaseLayout.astro";
+import { SITE } from "@/consts";
 
 interface Props {
   post: CollectionEntry<"posts">;
@@ -9,7 +10,35 @@ interface Props {
 }
 
 const { post, prev = null, next = null } = Astro.props;
-const { title, date, summary, tags } = post.data;
+const { title, date, updatedDate, summary, image, tags } = post.data;
+
+const canonical = new URL(`/posts/${post.id}`, SITE.url).toString();
+
+const schema = {
+  "@context": "https://schema.org",
+  "@type": "BlogPosting",
+  headline: title,
+  ...(summary && { description: summary }),
+  url: canonical,
+  datePublished: date.toISOString(),
+  dateModified: (updatedDate ?? date).toISOString(),
+  ...(image && { image }),
+  inLanguage: SITE.locale,
+  author: {
+    "@type": "Person",
+    name: SITE.author,
+    url: SITE.url,
+  },
+  publisher: {
+    "@type": "Person",
+    name: SITE.author,
+    url: SITE.url,
+  },
+  mainEntityOfPage: {
+    "@type": "WebPage",
+    "@id": canonical,
+  },
+};
 
 const formatted = new Intl.DateTimeFormat("en-US", {
   year: "numeric",
@@ -19,6 +48,9 @@ const formatted = new Intl.DateTimeFormat("en-US", {
 ---
 
 <BaseLayout title={title} description={summary}>
+  <Fragment slot="head">
+    <script type="application/ld+json" set:html={JSON.stringify(schema)}></script>
+  </Fragment>
   <article class="mx-auto max-w-2xl px-6 pt-32 pb-20">
     <header class="mb-12">
       <a

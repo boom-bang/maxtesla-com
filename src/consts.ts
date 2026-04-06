@@ -8,6 +8,7 @@ export const SITE = {
   author: "Max Tesla",
   email: "ahoy@maxtesla.com",
   locale: "en-US",
+  sameAs: ["https://x.com/allsetmax", "https://github.com/boom-bang"],
 } as const;
 
 export type SocialLink = {
