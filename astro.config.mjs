@@ -5,6 +5,8 @@ import mdx from "@astrojs/mdx";
 import sitemap from "@astrojs/sitemap";
 import vercel from "@astrojs/vercel";
 import tailwindcss from "@tailwindcss/vite";
+import partytown from "@astrojs/partytown";
+import critters from "@critters-rs/astro";
 
 /**
  * Custom rehype plugin: add `rel="nofollow"` to every <a> in markdown/MDX
@@ -76,7 +78,13 @@ export default defineConfig({
   ],
   site: "https://maxtesla.com",
   trailingSlash: "never",
-  integrations: [react(), mdx(), sitemap()],
+  integrations: [
+    react(),
+    mdx(),
+    sitemap(),
+    partytown({ config: { forward: ["dataLayer.push"] } }),
+    critters(),
+  ],
   adapter: vercel({
     webAnalytics: { enabled: true },
     imageService: true,
