@@ -225,4 +225,34 @@ const TAGS = [
         rotate(var(--tag-rotate));
     }
   }
+
+  @media (max-width: 640px) {
+    .skill-tags__tag {
+      transform:
+        translate(
+          calc(-50% + var(--tag-x) * 0.15),
+          calc(-50% + var(--tag-y) * 0.15)
+        )
+        rotate(var(--tag-jitter));
+    }
+
+    @keyframes scatter {
+      from {
+        transform:
+          translate(
+            calc(-50% + var(--tag-x) * 0.15),
+            calc(-50% + var(--tag-y) * 0.15)
+          )
+          rotate(var(--tag-jitter));
+      }
+      to {
+        transform:
+          translate(
+            calc(-50% + var(--tag-x) * 0.55),
+            calc(-50% + var(--tag-y) * 0.55)
+          )
+          rotate(var(--tag-rotate));
+      }
+    }
+  }
 </style>
