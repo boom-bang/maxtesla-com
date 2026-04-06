@@ -8,17 +8,17 @@ draft: false
 
 Two typographic orphans I couldn't ship.
 
-I'd expanded the NOW section — added "on product, data, and AI" after the notes link, "by Blask" after Signal & Noise. Desktop looked right:
+I'd expanded the NOW section - added "on product, data, and AI" after the notes link, "by Blask" after Signal & Noise. Desktop looked right:
 
-![NOW section on desktop — all three lines reading cleanly](/images/desktop-allgood.png)
+![NOW section on desktop - all three lines reading cleanly](/images/desktop-allgood.png)
 
-On a 375px iPhone SE viewport — the narrowest you'd realistically encounter — those trailing words wrapped and sat alone on the next line:
+On a 375px iPhone SE viewport - the narrowest you'd realistically encounter - those trailing words wrapped and sat alone on the next line:
 
-![NOW section on mobile — "and AI." orphaned, "by Blask." orphaned](/images/mobile-allbad.png)
+![NOW section on mobile - "and AI." orphaned, "by Blask." orphaned](/images/mobile-allbad.png)
 
 "and AI." alone. "Blask." alone.
 
-Hot metal typesetters named both conditions: a [widow](https://en.wikipedia.org/wiki/Widows_and_orphans) is the last line of a paragraph stranded alone at the top of a new column; an orphan is the opening line left at the bottom, cut off from the paragraph that follows. Shop slang, emotionally loaded by design. Typesetters adjusted spacing and tracking by hand until every paragraph broke cleanly — considered a basic mark of craft. The problem survived into desktop publishing; InDesign has a widow/orphan control buried in paragraph styles that most people never touch.
+Hot metal typesetters named both conditions: a [widow](https://en.wikipedia.org/wiki/Widows_and_orphans) is the last line of a paragraph stranded alone at the top of a new column; an orphan is the opening line left at the bottom, cut off from the paragraph that follows. Shop slang, emotionally loaded by design. Typesetters adjusted spacing and tracking by hand until every paragraph broke cleanly - considered a basic mark of craft. The problem survived into desktop publishing; InDesign has a widow/orphan control buried in paragraph styles that most people never touch.
 
 <figure>
   <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/3/30/Orphan_typesetting.svg/3840px-Orphan_typesetting.svg.png" alt="Typesetting diagram showing runt, orphan, and widow lines highlighted in blue, green, and yellow" style="width:100%;height:auto" />
@@ -33,6 +33,6 @@ The fix here: `<span class="hidden sm:inline">` around the trailing words. Mobil
 <li>— Writing occasional <a href="/posts">notes</a><span class="hidden sm:inline"> on product, data, and AI</span>.</li>
 ```
 
-The question is which words survive 390px. "notes" — yes. "on product, data, and AI" — context. Same for "by Blask": the show name carries the link; attribution waits.
+The question is which words survive 390px. "notes" - yes. "on product, data, and AI" - context. Same for "by Blask": the show name carries the link; attribution waits.
 
 No media query. One Tailwind utility pair. Nobody inherits the typesetter's job on the web.
