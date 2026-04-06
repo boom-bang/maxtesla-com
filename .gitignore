@@ -30,3 +30,8 @@ Thumbs.db
 # temp
 *.log
 .cache/
+
+CLAUDE.md
+.claude/
+.cursor/
+.vscode/
