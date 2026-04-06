@@ -1,5 +1,5 @@
 // @ts-check
-import { defineConfig } from "astro/config";
+import { defineConfig, fontProviders } from "astro/config";
 import react from "@astrojs/react";
 import mdx from "@astrojs/mdx";
 import sitemap from "@astrojs/sitemap";
@@ -45,6 +45,35 @@ function rehypeNofollowByDefault() {
 
 // https://astro.build/config
 export default defineConfig({
+  fonts: [
+    {
+      provider: fontProviders.fontsource(),
+      name: "Inter Tight",
+      cssVariable: "--font-inter-tight",
+      weights: [500, 600, 700, 800],
+      styles: ["normal"],
+      subsets: ["latin"],
+      fallbacks: [],
+    },
+    {
+      provider: fontProviders.fontsource(),
+      name: "Inter",
+      cssVariable: "--font-inter",
+      weights: [400, 500, 600],
+      styles: ["normal"],
+      subsets: ["latin"],
+      fallbacks: [],
+    },
+    {
+      provider: fontProviders.fontsource(),
+      name: "JetBrains Mono",
+      cssVariable: "--font-jetbrains-mono",
+      weights: [400, 500],
+      styles: ["normal"],
+      subsets: ["latin"],
+      fallbacks: [],
+    },
+  ],
   site: "https://maxtesla.com",
   trailingSlash: "never",
   integrations: [react(), mdx(), sitemap()],
