@@ -6,7 +6,8 @@ const isActive = (href: string) => (href === "/" ? pathname === "/" : pathname.s
 ---
 
 <nav
-  class="fixed top-0 left-0 right-0 z-40 mx-auto flex max-w-3xl items-center justify-between px-6 py-5 font-mono text-sm"
+  id="main-nav"
+  class="fixed top-0 left-0 right-0 z-40 mx-auto flex items-center justify-between font-mono text-sm"
 >
   <a
     href="/"
@@ -42,7 +43,39 @@ const isActive = (href: string) => (href === "/" ? pathname === "/" : pathname.s
   </div>
 </nav>
 
+<style>
+  #main-nav {
+    max-width: 48rem;
+    padding: 1.25rem 1.5rem;
+    transition:
+      max-width 0.25s cubic-bezier(0.25, 0.46, 0.45, 0.94),
+      padding 0.25s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+  }
+
+  #main-nav.scrolled {
+    max-width: 100%;
+    padding: 1rem 2rem;
+  }
+</style>
+
 <script is:inline>
+  (function () {
+    const nav = document.getElementById("main-nav");
+    if (nav) {
+      let ticking = false;
+      const update = () => {
+        nav.classList.toggle("scrolled", window.scrollY > 10);
+        ticking = false;
+      };
+      window.addEventListener("scroll", () => {
+        if (!ticking) {
+          requestAnimationFrame(update);
+          ticking = true;
+        }
+      }, { passive: true });
+    }
+  })();
+
   (function () {
     const btn = document.getElementById("theme-toggle");
     if (!btn) return;
