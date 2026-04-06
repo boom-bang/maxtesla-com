@@ -1,0 +1,38 @@
+---
+title: "Fixing Typographic Orphans on Mobile with Tailwind"
+date: 2026-04-06
+summary: "Added context to the NOW section, got two typographic orphans on mobile, fixed with a single Tailwind utility."
+tags: ["web", "typography"]
+draft: false
+---
+
+Two typographic orphans I couldn't ship.
+
+I'd expanded the NOW section — added "on product, data, and AI" after the notes link, "by Blask" after Signal & Noise. Desktop looked right:
+
+![NOW section on desktop — all three lines reading cleanly](/images/desktop-allgood.png)
+
+On a 375px iPhone SE viewport — the narrowest you'd realistically encounter — those trailing words wrapped and sat alone on the next line:
+
+![NOW section on mobile — "and AI." orphaned, "by Blask." orphaned](/images/mobile-allbad.png)
+
+"and AI." alone. "Blask." alone.
+
+Hot metal typesetters named both conditions: a [widow](https://en.wikipedia.org/wiki/Widows_and_orphans) is the last line of a paragraph stranded alone at the top of a new column; an orphan is the opening line left at the bottom, cut off from the paragraph that follows. Shop slang, emotionally loaded by design. Typesetters adjusted spacing and tracking by hand until every paragraph broke cleanly — considered a basic mark of craft. The problem survived into desktop publishing; InDesign has a widow/orphan control buried in paragraph styles that most people never touch.
+
+<figure>
+  <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/3/30/Orphan_typesetting.svg/3840px-Orphan_typesetting.svg.png" alt="Typesetting diagram showing runt, orphan, and widow lines highlighted in blue, green, and yellow" style="width:100%;height:auto" />
+  <figcaption>
+    The very short final line of a paragraph composed of a single word (<span style="background:#b3d4f5;color:#000;border-radius:3px;padding:1px 4px">highlighted blue</span>) is a <strong>runt</strong>. The first line of a paragraph beginning at the end of a page (<span style="background:#90ee90;color:#000;border-radius:3px;padding:1px 4px">highlighted green</span>) is called an <strong>orphan</strong> (sometimes called a <strong>widow</strong>). The last line of a paragraph continuing on to a new page (<span style="background:#ffff00;color:#000;border-radius:3px;padding:1px 4px">highlighted yellow</span>) is a <strong>widow</strong> (sometimes called an <strong>orphan</strong>).
+  </figcaption>
+</figure>
+
+The fix here: `<span class="hidden sm:inline">` around the trailing words. Mobile: span disappears, line ends clean. From 640px up: full text.
+
+```html
+<li>— Writing occasional <a href="/posts">notes</a><span class="hidden sm:inline"> on product, data, and AI</span>.</li>
+```
+
+The question is which words survive 390px. "notes" — yes. "on product, data, and AI" — context. Same for "by Blask": the show name carries the link; attribution waits.
+
+No media query. One Tailwind utility pair. Nobody inherits the typesetter's job on the web.
