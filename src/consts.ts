@@ -3,7 +3,7 @@ export const SITE = {
   handle: "max tesla",
   tagline: "builds things",
   description:
-    "Personal site of Max Tesla — building Blask, exploring the edges of product, data, and AI.",
+    "Max Tesla: CEO & Co-Founder of Blask — turning millions of live pages into market intelligence brands can reason about. Writing on product and AI.",
   url: "https://maxtesla.com",
   author: "Max Tesla",
   email: "ahoy@maxtesla.com",
