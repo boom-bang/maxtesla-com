@@ -1,0 +1,78 @@
+---
+title: "The market that knew more about SCOTUS than most lawyers did"
+date: 2026-04-09
+summary: "On April 6, Kalshi won its most important court case ever. The prediction market betting on that outcome immediately dropped."
+tags: ["prediction-markets", "data", "Blask"]
+---
+
+We've been building something at [Blask](https://blask.com) around prediction markets for a while now. Nothing I can talk about yet. But it's the reason I've been deep in this space, and it's what sent me to Polymarket's API a few nights ago with a Postgres instance and too much free time.
+
+I pulled everything: markets, price history, trades - and started running queries. One market stopped me.
+
+"SCOTUS accepts sports event contract case by July 31, 2026?"
+
+I'd actually seen this market before. Denis, my data journalist at Blask, used a screenshot of it in his piece on [prediction markets in the US](https://blask.com/blog/prediction-markets-in-the-us/ "dofollow") - the market sitting at 25% for July 31, 56% for December 31, right in the middle of the regulatory fight. That screenshot stuck with me. A market pricing its own regulatory future.
+
+Nine months of data. 3,500 trades. I kept finding things I didn't expect.
+
+On April 6, Kalshi won the most important court case in its history. A federal appeals court ruled 2-1 that the CFTC, not New Jersey, has exclusive authority over Kalshi's sports event contracts. [Reuters](https://www.reuters.com/legal/litigation/betting-verdict-kalshi-case-could-shape-prediction-markets-2026-04-06/) called it "the first time a federal appeals court has ruled on what has become the central issue" in the state vs. federal fight over prediction markets.
+
+The prediction market betting on this outcome immediately dropped 4.5 percentage points.
+
+The market wasn't asking whether Kalshi would win in New Jersey. It was asking something narrower: will nine Supreme Court justices agree to hear the case before July 31?
+
+![Nine months of YES probability on the SCOTUS market - opened at 11%, peaked near 70% on raw daily data, settled around 12% by April 2026](/images/scotus-price.png)
+
+The market opened in July 2025 at 11%. By October, after a CFTC hearing that went well for Kalshi, the raw daily price hit 70% on some ticks, with the 14-day average settling near 65%. Then nine months of drift: past 30%, past 25%, arriving at 12.5% right when Kalshi's lawyers were celebrating in Philadelphia.
+
+The Supreme Court doesn't take cases to decide who's right. It takes cases when lower courts disagree - a circuit split. The 3rd Circuit ruling added one more voice to the "CFTC has jurisdiction" side. The split got messier, not cleaner. And even if SCOTUS decided tomorrow to take the case, its next term doesn't start until October, well past the market's July 31 deadline.
+
+At the same moment the 3rd Circuit ruled for Kalshi, a Nevada court was blocking Kalshi, and the 9th Circuit was preparing a consolidated hearing involving Kalshi, Robinhood, and Crypto.com. The market priced all of it. Nobody wrote it down.
+
+After the price history I pulled the full trade record: 2,010 YES-token trades, $548k in volume. I wanted to know who was paying what.
+
+![Whale traders (≥$500 per trade) paid 19.3¢ on average vs retail's 23.7¢ - a consistent 18% discount across the market's lifetime](/images/scotus-whale-retail.png)
+
+Wallets placing $500 or more paid an average of 19.3 cents per YES share. Retail paid 23.7 cents. 18% cheaper, across nine months.
+
+They weren't smarter so much as earlier. They bought at 15-20%, before the October spike. Retail came in at 30-35%, after the trade had already happened. By the time the conventional wisdom caught up, the edge was priced out.
+
+The size distribution fills in the rest.
+
+![Trade sizes follow a log-normal distribution with median $20 - but the right tail shows a second population clustered at $500-$1,000 round numbers](/images/scotus-trade-sizes.png)
+
+Median trade: $20. Retail through and through. But the right tail is heavier than a clean log-normal - a hump at $500-$1,000 where whale entries cluster on round numbers. Two populations, one orderbook.
+
+<div style="border-radius: 12px; overflow: hidden; display: flex; justify-content: center;">
+<blockquote class="twitter-tweet" data-theme="dark"><p lang="en" dir="ltr">&quot;wall street investors&quot; is the bullish case actually<br />draftkings vig on the same MLB game polymarket just became exclusive partner of: 5-7%. kalshi market maker spread on a liquid contract: ~2¢ <a href="https://t.co/L6e4Ft7t95">https://t.co/L6e4Ft7t95</a></p>&mdash; Max Tesla (@allsetmax) <a href="https://twitter.com/allsetmax/status/2034691204810457276?ref_src=twsrc%5Etfw">March 19, 2026</a></blockquote>
+<script async src="https://platform.twitter.com/widgets.js" charset="utf-8"></script>
+</div>
+
+The whales weren't the thing that got me. The price-impact analysis was.
+
+In a normal financial market - stocks, currencies, liquid options - $10,000 of net buying moves the price. [Kyle (1985)](https://www.jstor.org/stable/1913210) Lambda measures exactly that: how much order flow translates into price change.
+
+In this market it came out essentially zero.
+
+![Kyle's lambda scatterplot: daily net buy flow vs next-day price change. R²=0.00. The two right-side outliers - $65k volume on Jan 20, $14k net buy on Jan 14 - barely moved price at all.](/images/scotus-kyles-lambda.png)
+
+The two rightmost bubbles say it plainly. January 14: $14,000 in net buying, price up 2pp. January 20: $65,000 in volume, $12,000 in net buying - the biggest trading day in the market's life - price down half a point. Enormous flow, no lasting movement.
+
+The October spike, the February jump, the April drop: specific court filings, regulatory statements, CFTC actions. Order flow didn't move this market. Public information did.
+
+A prediction market isn't a market in the financial sense. It's a poll where people put money behind their answers. Price sits still when there's nothing new to learn. A federal court hands down a ruling and it reprices in hours.
+
+522 wallets, nine months, one coherent legal theory about SCOTUS certiorari procedure. Nobody coordinated. Enough people who understood the question had money on the line.
+
+The Prediction Markets Are Gambling Act - Senators Schiff and Curtis, introduced in March - would bar CFTC-regulated exchanges from listing sports-related contracts. More than 20 states have sued or issued cease-and-desists. The CFTC filed its own suits against Arizona, Connecticut, and Illinois in April.
+
+The fight is about jurisdiction. The thing nobody is accounting for is what gets lost.
+
+Nine months of aggregated belief about a legal question, updated in real time as rulings came in, encoding a theory about certiorari procedure that turned out to be correct. That doesn't exist in any newspaper or law review. It existed in a price on a website most people have never heard of.
+
+The SCOTUS market was under a million dollars. The same mechanism at a billion would be something else entirely.
+
+Instead the debate is whether it looks too much like a parlay.
+
+
+*Data: Polymarket CLOB API (daily prices) and data-api.polymarket.com (trades). 2,010 YES-token trades, 258 daily price points, July 2025 – April 2026. Analysis: Python, pandas, scipy, uv.*
