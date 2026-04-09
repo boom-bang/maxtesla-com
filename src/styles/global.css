@@ -285,3 +285,7 @@ html.light .astro-code span {
   font-weight: inherit;
   font-size: inherit;
 }
+
+.twitter-tweet iframe {
+  border-radius: 12px !important;
+}
